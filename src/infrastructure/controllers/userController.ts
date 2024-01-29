@@ -10,8 +10,8 @@ const loginUser = new LoginUser(userRepository);
 export const userController = {
     async register(req: Request, res: Response) {
         try {
-            const { username, email, password, confirmPassword } = req.body;
-            await registerUser.execute(username, email, password, confirmPassword);
+            const { username, email, password } = req.body;
+            await registerUser.execute(username, email, password);
             res.status(201).send('User registered successfully');
         } catch (error) {
             if (error instanceof Error) {
