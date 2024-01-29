@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/main.js",
+    "start": "ts-node src/main.ts",
     "dev": "nodemon --watch 'src/**/*' -e ts,tsx --exec 'ts-node' src/main.ts",
     "build": "tsc"
   },
@@ -26,6 +26,7 @@
     "@types/mongoose": "^5.11.97",
     "@types/uuid": "^9.0.8",
     "nodemon": "^3.0.3",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   }
 }
