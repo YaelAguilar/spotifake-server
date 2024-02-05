@@ -1,4 +1,7 @@
+// src/main.ts
 import express from 'express';
+import http from 'http';
+import { initializeWebSocketServer } from './config/websocket';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -7,8 +10,11 @@ import userRoutes from './infrastructure/routes/userRoutes';
 dotenv.config();
 
 const app = express();
-
-app.use(cors({origin: 'http://localhost:5173'}));
+app.use(cors({
+    origin: 'http://localhost:5173',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true
+}));
 
 app.use(express.json());
 
@@ -18,7 +24,9 @@ mongoose.connect(process.env.MONGODB_URI as string)
 
 app.use('/api/users', userRoutes);
 
+const server = http.createServer(app);
+initializeWebSocketServer(server);
 
-app.listen(3000, () => {
+server.listen(3000, () => {
     console.log('Server is running on port 3000');
 });
