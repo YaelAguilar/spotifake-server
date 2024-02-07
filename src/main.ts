@@ -1,4 +1,3 @@
-// src/main.ts
 import express from 'express';
 import http from 'http';
 import { initializeWebSocketServer } from './config/websocket';
@@ -25,6 +24,8 @@ mongoose.connect(process.env.MONGODB_URI as string)
 app.use('/api/users', userRoutes);
 
 const server = http.createServer(app);
+
+//socket.io
 initializeWebSocketServer(server);
 
 server.listen(3000, () => {
