@@ -1,6 +1,8 @@
 import express from 'express';
+import path from 'path';
 import http from 'http';
 import { initializeWebSocketServer } from './config/websocket';
+import { upcomingReleasesController } from './infrastructure/controllers/upcomingReleasesController';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -27,6 +29,10 @@ const server = http.createServer(app);
 
 //socket.io
 initializeWebSocketServer(server);
+
+//short polling
+app.use(express.static(path.join(__dirname, '../public')));
+app.get('/api/upcoming-releases', upcomingReleasesController);
 
 server.listen(3000, () => {
     console.log('Server is running on port 3000');
