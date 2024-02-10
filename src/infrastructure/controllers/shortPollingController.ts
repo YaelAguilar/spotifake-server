@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getUpcomingReleases } from '../../application/useCases/getUpcomingReleases';
+import { getUpcomingReleases } from '../../application/useCases/shortPolling';
 
 export const upcomingReleasesController = async (req: Request, res: Response) => {
   try {
