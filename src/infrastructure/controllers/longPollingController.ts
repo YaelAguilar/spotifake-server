@@ -14,7 +14,7 @@ const waitForNextRelease = () => {
 };
 
 export const longPollingController = async (req: Request, res: Response) => {
-    console.log("Iniciando Long Polling...");
+    console.log("Iniciando Long Polling");
 
     const latestRelease = await waitForNextRelease();
 
