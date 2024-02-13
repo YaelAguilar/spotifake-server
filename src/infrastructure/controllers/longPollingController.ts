@@ -1,22 +1,31 @@
 import { Request, Response } from 'express';
+import mongoose from 'mongoose';
 
-const waitForNextRelease = () => {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            const fakeRelease = {
-                artist: "Billie Eilish",
-                single: "Happier Than Ever",
-                createdAt: new Date().toISOString()
-            };
-            resolve(fakeRelease);
-        }, 10000);
-    });
-};
+const releaseSchema = new mongoose.Schema({
+  artist: { type: String, required: true },
+  single: { type: String, required: true },
+  imageUrl: { type: String, required: true },
+}, { timestamps: true });
+
+const Release = mongoose.models.Release || mongoose.model('Release', releaseSchema);
 
 export const longPollingController = async (req: Request, res: Response) => {
-    console.log("Iniciando Long Polling");
+  let lastRelease = await Release.findOne().sort({ _id: -1 });
+  
+  const checkForLatestRelease = setInterval(async () => {
+    const latestRelease = await Release.findOne().sort({ _id: -1 });
 
-    const latestRelease = await waitForNextRelease();
+    if (latestRelease && (!lastRelease || latestRelease._id.toString() !== lastRelease._id.toString())) {
+      clearInterval(checkForLatestRelease);
+      lastRelease = latestRelease;
+      res.json(latestRelease);
+    }
+  }, 2000);
 
-    res.json(latestRelease);
+  setTimeout(() => {
+    clearInterval(checkForLatestRelease);
+    if (!res.headersSent) {
+      res.status(204).send();
+    }
+  }, 30000);
 };
